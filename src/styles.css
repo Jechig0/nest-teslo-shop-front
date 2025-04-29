@@ -1,0 +1,34 @@
+/* You can add global styles to this file, and also import other style files */
+@import "tailwindcss";
+@plugin "daisyui";
+
+    @font-face {
+        font-family: 'Montserrat', sans-serif;
+        src: url('/public/assets/fonts/monserrat-static/MontserratAlternates-Medium.ttf') format('truetype');
+    }
+
+    @keyframes fade-in {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+    
+    .fade-in {
+      animation: fade-in 0.8s ease-in-out forwards;
+    }
+    
+
+
+.font-montserrat {
+    font-family: 'Montserrat', sans-serif;
+  }
+
+/* @font-face {
+    font-family: 'Poppins';
+    src: url('/assets/fonts/poppins/Poppins-Regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+  } */
