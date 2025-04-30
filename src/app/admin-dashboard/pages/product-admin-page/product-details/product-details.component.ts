@@ -72,7 +72,7 @@ export class ProductDetailsComponent implements OnInit{
 
     const productLike: Partial<Product> = {
       ...(formValue as any), //Este es el formato de producto que guarsariamos en la base de datos
-      tags: formValue.tags?.split(',').map((tag: string) => tag.trim()) ?? [],
+      tags: formValue.tags?.toLowerCase().split(',').map((tag: string) => tag.trim()) ?? [],
     }
 
     if(this.product().id === 'new'){
@@ -80,7 +80,7 @@ export class ProductDetailsComponent implements OnInit{
       this.router.navigate(['/admin/products', product.id])      
     }
     else{
-      const product = await firstValueFrom(this.productsService.updateProduct(this.product().id, productLike, this.imageFileList))      
+      await firstValueFrom(this.productsService.updateProduct(this.product().id, productLike, this.imageFileList))      
 
     }
 
@@ -92,6 +92,7 @@ export class ProductDetailsComponent implements OnInit{
 
   onFilesChanged(event: Event){
     const fileList = (event.target as HTMLInputElement).files
+    this.imageFileList = fileList ?? undefined
     this.tempImages.set([]) // Resetear la lista de imagenes temporales
 
     //Guardar las imagenes en la lista de imagenes temporales

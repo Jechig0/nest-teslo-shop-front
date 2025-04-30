@@ -1,5 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
-import { ProductTableComponent } from "../../components/product-table/product-table.component";
+import { ProductTableComponent } from "../../../products/components/product-table/product-table.component";
 import { ProductsService } from '@/products/services/products.service';
 import { PaginationService } from '@/shared/components/pagination/pagination.service';
 import { rxResource } from '@angular/core/rxjs-interop';

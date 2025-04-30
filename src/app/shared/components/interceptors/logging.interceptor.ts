@@ -6,9 +6,11 @@ export function loggingInterceptor
 //y el siguiente proceso a ejecutar y devuelve un observable de cualquier tipo
 (req: HttpRequest<unknown>, next: HttpHandlerFn)
 : Observable<HttpEvent<unknown>> {
-    return next(req).pipe(tap(event => {
+  return next(req).pipe(
+    tap((event) => {
       if (event.type === HttpEventType.Response) {
         console.log(req.url, 'returned a response with status', event.status);
       }
-    }));
+    })
+  );
   }

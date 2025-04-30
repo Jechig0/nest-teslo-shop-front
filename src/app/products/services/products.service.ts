@@ -35,8 +35,6 @@ export class ProductsService {
 
   private http = inject(HttpClient)
 
-  productsArray = signal<Product[]>([])
-
   private productsCache = new Map<string, ProductsResponse>()
   private productCache = new Map<string, Product>()
 
@@ -52,9 +50,9 @@ export class ProductsService {
     return this.http
     .get<ProductsResponse>(`${baseUrl}/products`,{
       params:{
-      limit:limit,
-      offset:offset,
-      gender:gender,
+      limit,
+      offset,
+      gender,
     }
   }).pipe(
     tap((resp) => this.productsCache.set(key, resp)),// Guardamos la respuesta en el cache
@@ -64,13 +62,12 @@ export class ProductsService {
     }
 
     getProductByIdSlug(idSlug:string):Observable<Product>{
-      const key = idSlug
       //Si la clave ya existe en el cache, devolvemos el valor del cache
-      if(this.productCache.has(key)){
-        return of(this.productCache.get(key)!)
+      if(this.productCache.has(idSlug)){
+        return of(this.productCache.get(idSlug)!)
       }
       return this.http.get<Product>(`${baseUrl}/products/${idSlug}`).pipe(
-        tap((resp) => this.productCache.set(key, resp)),// Guardamos la respuesta en el cache
+        tap((resp) => this.productCache.set(idSlug, resp)),// Guardamos la respuesta en el cache
         tap(res => console.log(res))
       )
 
@@ -122,7 +119,7 @@ export class ProductsService {
     }
 
     //Actualizamos las cachés al actualizar un producto
-    updateProductCache(product:Product):void {
+    updateProductCache(product:Product){
       const productId = product.id
 
       //Para la caché de producto individual, basta con reemplazar el producto
@@ -130,17 +127,18 @@ export class ProductsService {
 
       //Para la caché general, como no podemos saber la key al ser una concatenación de parámetros
       //Recorremos el mapa buscando el producto (el que el id sea identico)
-      this.productsCache.forEach((productsResponse) => {
-        productsResponse.products = productsResponse.products.map((currentProduct) =>{
-          return currentProduct.id === productId ? product: currentProduct
-        })
+      this.productsCache.forEach((productResponse) => {
+        productResponse.products = productResponse.products.map(
+            (currentProduct) =>
+           currentProduct.id === productId ? product: currentProduct
+        );
 
-      })
+      });
     }
-
+  
     uploadImages (images?: FileList):Observable<string[]> {
       if(!images) return of([])
-      const uploadObservables = Array.from(images).map(imageFile => this.uploadImage(imageFile))
+      const uploadObservables = Array.from(images).map((imageFile) => this.uploadImage(imageFile))
       return forkJoin(uploadObservables).pipe(
         tap((imageNames) => console.log({imageNames})),
       )
@@ -151,7 +149,7 @@ export class ProductsService {
     uploadImage(imageFile: File):Observable<string> {
       const formData = new FormData()
       formData.append('file', imageFile)
-      return this.http.post<{fileName: string}>(`${baseUrl}/files/product`, formData).pipe(
+      return this.http.post<{ fileName: string }>(`${baseUrl}/files/product`, formData).pipe(
         map((resp) => resp.fileName)
       )
     }

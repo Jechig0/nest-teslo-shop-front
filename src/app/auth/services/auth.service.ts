@@ -45,6 +45,7 @@ export class AuthService {
         password: password,
       })
       .pipe(
+        tap((resp) => console.log({resp})),
         map((resp) => this.handleAuthSuccess(resp)),
         catchError((error: any) => this.handleAuthError(error))
       );
@@ -65,6 +66,7 @@ export class AuthService {
         // },
       })
       .pipe(
+        tap((resp) => console.log('Revisando status:',{resp})),
         map((resp) => this.handleAuthSuccess(resp)),
         catchError((error: any) => this.handleAuthError(error))
       );

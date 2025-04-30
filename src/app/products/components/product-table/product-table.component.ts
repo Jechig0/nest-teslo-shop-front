@@ -1,6 +1,6 @@
 import { Product } from '@/products/interfaces/product.interface';
 import { Component, input } from '@angular/core';
-import { ProductImagePipe } from "../../../products/pipes/product-image.pipe";
+import { ProductImagePipe } from "../../pipes/product-image.pipe";
 import { RouterLink } from '@angular/router';
 import { CurrencyPipe } from '@angular/common';
 
